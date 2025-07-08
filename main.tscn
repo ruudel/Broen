@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://dgpk5jx7jj0ac"]
+
+[ext_resource type="Script" uid="uid://c1sur85g7a384" path="res://world.gd" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="2_lquwl"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="3_7mycd"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="4_272bh"]
+[ext_resource type="PackedScene" uid="uid://bxgaw10fs18br" path="res://player.tscn" id="5_lquwl"]
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_0xm2m")
+
+[node name="Background" type="ParallaxBackground" parent="."]
+
+[node name="Ground" type="Node2D" parent="."]
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("2_lquwl")
+metadata/_custom_type_script = "uid://couw105c3bde4"
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("3_7mycd")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root"]
+script = ExtResource("4_272bh")
+
+[node name="Moving" type="Node" parent="StateChart/Root"]
+script = ExtResource("4_272bh")
+
+[node name="Player" parent="." instance=ExtResource("5_lquwl")]
+position = Vector2(128, 256)
