@@ -2,11 +2,12 @@ extends Node2D
 
 const GROUND_BLOCK_SCENE = preload("res://ground_block.tscn")
 const TOWN_BLOCK_SCENE = preload("res://town_block.tscn")
-var speed := 100
+var speed := 1000
 var ground_blocks := []
-var last_town_x := -10000 # Start far away so first can spawn
-const TOWN_MIN_DISTANCE := 3000 # Minimum distance between towns (adjust as needed)
+var last_town := 100 # Start far away so first can spawn
+const TOWN_MIN_DISTANCE := 10 # Minimum distance between towns (adjust as needed)
 const TOWN_CHANCE := 0.15 # 15% chance to spawn a town block
+var distance_traveled := 0 # Track total distance traveled, increase every time you spawn a new block
 
 func _ready():
 	spawn_ground_block(Vector2(0, 0))
@@ -20,11 +21,12 @@ func _process(_delta):
 func spawn_ground_block(spawn_position: Vector2):
 	var block_scene
 	# Only spawn a town if far enough from last one and random chance
-	if spawn_position.x - last_town_x > TOWN_MIN_DISTANCE and randf() < TOWN_CHANCE:
+	if last_town > TOWN_MIN_DISTANCE and randf() < TOWN_CHANCE:
 		block_scene = TOWN_BLOCK_SCENE
-		last_town_x = spawn_position.x
+		last_town = 0 # Reset last town x to allow next town to spawn
 	else:
 		block_scene = GROUND_BLOCK_SCENE
+		last_town += 1
 
 	var block = block_scene.instantiate()
 	block.position = spawn_position
@@ -32,6 +34,7 @@ func spawn_ground_block(spawn_position: Vector2):
 	ground_blocks.append(block)
 	# Connect the BlockEndNotifier signal
 	block.get_node("BlockEndNotifier").connect("screen_entered", (Callable(self, "_on_groundblock_end_visible").bind(block)))
+	distance_traveled += 1
 
 func _on_groundblock_end_visible(block):
 	# Spawn the next block when the end enters the viewport
