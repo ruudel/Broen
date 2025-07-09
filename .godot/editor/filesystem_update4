@@ -1,1 +1,7 @@
+res://world.gd
 res://main.tscn
+res://player.tscn
+res://ground_block.tscn
+res://player.gd
+res://town.tscn
+res://town_block.tscn

@@ -1,26 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://bxgaw10fs18br"]
+[gd_scene load_steps=10 format=3 uid="uid://bxgaw10fs18br"]
 
 [ext_resource type="Script" uid="uid://fvfdv5navlf5" path="res://player.gd" id="1_b26j0"]
 [ext_resource type="Texture2D" uid="uid://24qucv6ce3n5" path="res://assets/Sprites/Characters/Default/character_green_idle.png" id="1_hqtel"]
-[ext_resource type="Texture2D" uid="uid://dgvakepr036dl" path="res://assets/Spritesheets/spritesheet-characters-default.png" id="2_sweqy"]
 [ext_resource type="Texture2D" uid="uid://do6sd0angcgc4" path="res://assets/Sprites/Characters/Default/character_green_walk_a.png" id="3_2hs0m"]
 [ext_resource type="Texture2D" uid="uid://lb8rdi6aujch" path="res://assets/Sprites/Characters/Default/character_green_walk_b.png" id="4_1jxqw"]
 [ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="5_dw050"]
 [ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="6_b26j0"]
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="7_n7ghd"]
-[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="8_nvl01"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dw050"]
-atlas = ExtResource("2_sweqy")
-region = Rect2(384, 640, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b26j0"]
-atlas = ExtResource("2_sweqy")
-region = Rect2(384, 768, 128, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n7ghd"]
-atlas = ExtResource("2_sweqy")
-region = Rect2(384, 896, 128, 128)
+[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="9_b26j0"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nvl01"]
 animations = [{
@@ -30,20 +17,6 @@ animations = [{
 }],
 "loop": true,
 "name": &"idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dw050")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b26j0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_n7ghd")
-}],
-"loop": true,
-"name": &"jump",
 "speed": 5.0
 }, {
 "frames": [{
@@ -63,8 +36,8 @@ script = ExtResource("1_b26j0")
 
 [node name="PlayerAnimation" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_nvl01")
-animation = &"idle"
-frame_progress = 0.405891
+animation = &"walk"
+frame_progress = 0.890807
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("5_dw050")
@@ -77,19 +50,19 @@ initial_state = NodePath("Idle")
 [node name="Idle" type="Node" parent="StateChart/Root"]
 script = ExtResource("7_n7ghd")
 
-[node name="Idle" type="Node" parent="StateChart/Root/Idle"]
-script = ExtResource("8_nvl01")
+[node name="Transition" type="Node" parent="StateChart/Root/Idle"]
+script = ExtResource("9_b26j0")
 to = NodePath("../../Walk")
-event = &"walk"
+event = &"to_walk"
 delay_in_seconds = "0.0"
 
 [node name="Walk" type="Node" parent="StateChart/Root"]
 script = ExtResource("7_n7ghd")
 
-[node name="Idle" type="Node" parent="StateChart/Root/Walk"]
-script = ExtResource("8_nvl01")
+[node name="Transition" type="Node" parent="StateChart/Root/Walk"]
+script = ExtResource("9_b26j0")
 to = NodePath("../../Idle")
-event = &"idle"
+event = &"to_idle"
 delay_in_seconds = "0.0"
 
 [connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_idle_state_entered"]
