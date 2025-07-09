@@ -5,3 +5,4 @@ res://ground_block.tscn
 res://player.gd
 res://town.tscn
 res://town_block.tscn
+res://town_block.gd

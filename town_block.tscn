@@ -1,5 +1,6 @@
-[gd_scene load_steps=6 format=4 uid="uid://c3xknfq0um2qo"]
+[gd_scene load_steps=8 format=4 uid="uid://c3xknfq0um2qo"]
 
+[ext_resource type="Script" uid="uid://dnliklem1txgj" path="res://town_block.gd" id="1_cjd8k"]
 [ext_resource type="Texture2D" uid="uid://c4w6i7ljft01j" path="res://assets/Sheets/Environment/spritesheet-tiles-default.png" id="2_cjd8k"]
 [ext_resource type="Texture2D" uid="uid://bl1gfepmhk41l" path="res://assets/Sheets/Environment/medieval_tilesheet.png" id="2_h1wi2"]
 
@@ -624,7 +625,11 @@ terrain_set_1/mode = 0
 sources/4 = SubResource("TileSetAtlasSource_cjd8k")
 sources/6 = SubResource("TileSetAtlasSource_yiups")
 
-[node name="GroundBlock" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h1wi2"]
+size = Vector2(66, 66)
+
+[node name="TownBlock" type="Node2D"]
+script = ExtResource("1_cjd8k")
 
 [node name="GroundTiles" type="TileMapLayer" parent="."]
 z_as_relative = false
@@ -635,3 +640,11 @@ tile_set = SubResource("TileSet_jcn1r")
 [node name="BlockEndNotifier" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(608, 352)
 scale = Vector2(3.2, 3.2)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(160, 288)
+shape = SubResource("RectangleShape2D_h1wi2")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

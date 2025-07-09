@@ -1,4 +1,4 @@
-extends Node2D
+extends CharacterBody2D
 
 @onready var anim: AnimatedSprite2D = $PlayerAnimation
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bxgaw10fs18br"]
+[gd_scene load_steps=11 format=3 uid="uid://bxgaw10fs18br"]
 
 [ext_resource type="Script" uid="uid://fvfdv5navlf5" path="res://player.gd" id="1_b26j0"]
 [ext_resource type="Texture2D" uid="uid://24qucv6ce3n5" path="res://assets/Sprites/Characters/Default/character_green_idle.png" id="1_hqtel"]
@@ -31,7 +31,10 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dw050"]
+size = Vector2(90, 103)
+
+[node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_b26j0")
 
 [node name="PlayerAnimation" type="AnimatedSprite2D" parent="."]
@@ -40,7 +43,7 @@ z_as_relative = false
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_nvl01")
 animation = &"walk"
-frame_progress = 0.0174528
+frame_progress = 0.508481
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("5_dw050")
@@ -67,6 +70,10 @@ script = ExtResource("9_b26j0")
 to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 13.5)
+shape = SubResource("RectangleShape2D_dw050")
 
 [connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_idle_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Walk" to="." method="_on_walk_state_entered"]

@@ -2,21 +2,22 @@ extends Node2D
 
 const GROUND_BLOCK_SCENE = preload("res://ground_block.tscn")
 const TOWN_BLOCK_SCENE = preload("res://town_block.tscn")
-var speed := 1000
+var speed := 200
 var ground_blocks := []
 var last_town := 100 # Start far away so first can spawn
 const TOWN_MIN_DISTANCE := 10 # Minimum distance between towns (adjust as needed)
 const TOWN_CHANCE := 0.15 # 15% chance to spawn a town block
-var distance_traveled := 0 # Track total distance traveled, increase every time you spawn a new block
+var distance_traveled := -2 # Track total distance traveled, increase every time you spawn a new block
 
 func _ready():
 	spawn_ground_block(Vector2(0, 0))
 
 func _process(_delta):
+	$Distance.text = "Distance: " + str(distance_traveled)
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		$StateChart.send_event("player_walking")
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-		$StateChart.send_event("player_idle")
+		$StateChart.send_event("camp_entered")
 		
 func spawn_ground_block(spawn_position: Vector2):
 	var block_scene
@@ -32,6 +33,11 @@ func spawn_ground_block(spawn_position: Vector2):
 	block.position = spawn_position
 	add_child(block)
 	ground_blocks.append(block)
+
+	# If it's a town block, connect the signal
+	if block_scene == TOWN_BLOCK_SCENE:
+		block.connect("player_entered_town", Callable(self, "_on_player_entered_town"))
+
 	# Connect the BlockEndNotifier signal
 	block.get_node("BlockEndNotifier").connect("screen_entered", (Callable(self, "_on_groundblock_end_visible").bind(block)))
 	distance_traveled += 1
@@ -54,3 +60,6 @@ func _on_idle_state_entered():
 
 func _on_moving_state_entered():
 	get_node("Player/StateChart").send_event("to_walk")
+
+func _on_player_entered_town():
+	$StateChart.send_event("camp_entered")

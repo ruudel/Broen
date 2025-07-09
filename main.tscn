@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dgpk5jx7jj0ac"]
+[gd_scene load_steps=9 format=3 uid="uid://dgpk5jx7jj0ac"]
 
 [ext_resource type="Script" uid="uid://c1sur85g7a384" path="res://world.gd" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="2_lquwl"]
@@ -6,13 +6,19 @@
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="4_272bh"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="5_7mycd"]
 [ext_resource type="PackedScene" uid="uid://bxgaw10fs18br" path="res://player.tscn" id="5_lquwl"]
+[ext_resource type="FontFile" uid="uid://jkqo7qhhtp16" path="res://assets/Fonts/NotoSans-Regular.ttf" id="7_272bh"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5vw27"]
+font = ExtResource("7_272bh")
+font_size = 32
+outline_size = 12
+outline_color = Color(0.162066, 0.162066, 0.162066, 1)
+shadow_size = 0
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_0xm2m")
 
 [node name="Background" type="ParallaxBackground" parent="."]
-
-[node name="Ground" type="Node2D" parent="."]
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("2_lquwl")
@@ -20,12 +26,12 @@ metadata/_custom_type_script = "uid://couw105c3bde4"
 
 [node name="Root" type="Node" parent="StateChart"]
 script = ExtResource("3_7mycd")
-initial_state = NodePath("Idle")
+initial_state = NodePath("InCamp")
 
-[node name="Idle" type="Node" parent="StateChart/Root"]
+[node name="InCamp" type="Node" parent="StateChart/Root"]
 script = ExtResource("4_272bh")
 
-[node name="Transition" type="Node" parent="StateChart/Root/Idle"]
+[node name="Transition" type="Node" parent="StateChart/Root/InCamp"]
 script = ExtResource("5_7mycd")
 to = NodePath("../../Moving")
 event = &"player_walking"
@@ -36,14 +42,24 @@ script = ExtResource("4_272bh")
 
 [node name="Transition" type="Node" parent="StateChart/Root/Moving"]
 script = ExtResource("5_7mycd")
-to = NodePath("../../Idle")
-event = &"player_idle"
+to = NodePath("../../InCamp")
+event = &"camp_entered"
 delay_in_seconds = "0.0"
 
 [node name="Player" parent="." instance=ExtResource("5_lquwl")]
 position = Vector2(128, 256)
 
-[connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_idle_state_entered"]
-[connection signal="state_processing" from="StateChart/Root/Idle" to="." method="_on_idle_state_processing"]
+[node name="Distance" type="Label" parent="."]
+top_level = true
+z_index = 10
+z_as_relative = false
+offset_left = 421.0
+offset_top = 3.0
+offset_right = 640.0
+offset_bottom = 96.0
+label_settings = SubResource("LabelSettings_5vw27")
+
+[connection signal="state_entered" from="StateChart/Root/InCamp" to="." method="_on_idle_state_entered"]
+[connection signal="state_processing" from="StateChart/Root/InCamp" to="." method="_on_idle_state_processing"]
 [connection signal="state_entered" from="StateChart/Root/Moving" to="." method="_on_moving_state_entered"]
 [connection signal="state_processing" from="StateChart/Root/Moving" to="." method="_on_moving_state_processing"]

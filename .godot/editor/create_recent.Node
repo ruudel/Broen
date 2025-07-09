@@ -1,1 +1,5 @@
+Label
+CharacterBody2D
+CollisionShape2D
+Area2D
 TileMapLayer
