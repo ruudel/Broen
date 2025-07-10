@@ -4,20 +4,21 @@ const GROUND_BLOCK_SCENE = preload("res://ground_block.tscn")
 const TOWN_BLOCK_SCENE = preload("res://town_block.tscn")
 var speed := 200
 var ground_blocks := []
-var last_town := 100 # Start far away so first can spawn
+var last_town := 0
 const TOWN_MIN_DISTANCE := 10 # Minimum distance between towns (adjust as needed)
 const TOWN_CHANCE := 0.15 # 15% chance to spawn a town block
-var distance_traveled := -2 # Track total distance traveled, increase every time you spawn a new block
+var distance_traveled := -1  # Track total distance traveled, increase every time you spawn a new block
 
 func _ready():
-	spawn_ground_block(Vector2(0, 0))
+	spawn_ground_block(Vector2(640, 0))
+	ground_blocks.append(get_node("HomeTown"))
 
 func _process(_delta):
 	$Distance.text = "Distance: " + str(distance_traveled)
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		$StateChart.send_event("player_walking")
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-		$StateChart.send_event("camp_entered")
+		$StateChart.send_event("town_entered")
 		
 func spawn_ground_block(spawn_position: Vector2):
 	var block_scene
@@ -62,4 +63,4 @@ func _on_moving_state_entered():
 	get_node("Player/StateChart").send_event("to_walk")
 
 func _on_player_entered_town():
-	$StateChart.send_event("camp_entered")
+	$StateChart.send_event("town_entered")

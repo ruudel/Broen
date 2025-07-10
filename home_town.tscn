@@ -1,11 +1,11 @@
-[gd_scene load_steps=8 format=4 uid="uid://c3xknfq0um2qo"]
+[gd_scene load_steps=8 format=4 uid="uid://bh7ltq6ynwmq0"]
 
-[ext_resource type="Script" uid="uid://dnliklem1txgj" path="res://town_block.gd" id="1_cjd8k"]
-[ext_resource type="Texture2D" uid="uid://c4w6i7ljft01j" path="res://assets/Sheets/Environment/spritesheet-tiles-default.png" id="2_cjd8k"]
-[ext_resource type="Texture2D" uid="uid://bl1gfepmhk41l" path="res://assets/Sheets/Environment/medieval_tilesheet.png" id="2_h1wi2"]
+[ext_resource type="Script" uid="uid://dnliklem1txgj" path="res://town_block.gd" id="1_snpnx"]
+[ext_resource type="Texture2D" uid="uid://bl1gfepmhk41l" path="res://assets/Sheets/Environment/medieval_tilesheet.png" id="2_kfrs0"]
+[ext_resource type="Texture2D" uid="uid://c4w6i7ljft01j" path="res://assets/Sheets/Environment/spritesheet-tiles-default.png" id="3_xtjm7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cjd8k"]
-texture = ExtResource("2_h1wi2")
+texture = ExtResource("2_kfrs0")
 texture_region_size = Vector2i(70, 70)
 2:0/0 = 0
 3:0/0 = 0
@@ -301,7 +301,7 @@ texture_region_size = Vector2i(70, 70)
 20:13/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yiups"]
-texture = ExtResource("2_cjd8k")
+texture = ExtResource("3_xtjm7")
 texture_region_size = Vector2i(64, 64)
 0:0/0 = 0
 1:0/0 = 0
@@ -628,13 +628,13 @@ sources/6 = SubResource("TileSetAtlasSource_yiups")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_h1wi2"]
 size = Vector2(66, 66)
 
-[node name="TownBlock" type="Node2D"]
-script = ExtResource("1_cjd8k")
+[node name="HomeTown" type="Node2D"]
+script = ExtResource("1_snpnx")
 
-[node name="Tiles" type="TileMapLayer" parent="."]
+[node name="GroundTiles" type="TileMapLayer" parent="."]
 z_as_relative = false
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAAAAUABgABAAsAAAABAAUABgABAAsAAAACAAUABgABAAsAAAADAAUABgABAAsAAAAEAAUABgABAAsAAAAFAAUABgABAAsAAAAGAAUABgABAAsAAAAHAAUABgABAAsAAAAJAAUABgABAAsAAAAIAAUABgABAAsAAAAGAAQABAAEAAQAAAAFAAQABAALAAYAAAAFAAMABAALAAYAAAAGAAMABAALAAYAAAAHAAMABAALAAYAAAAHAAQABAALAAYAAAAHAAIABAAGAAIAAAAFAAIABAAFAAIAAAA=")
+tile_map_data = PackedByteArray("AAAAAAUABgABAAsAAAABAAUABgABAAsAAAACAAUABgABAAsAAAADAAUABgABAAsAAAAEAAUABgABAAsAAAAFAAUABgABAAsAAAAGAAUABgABAAsAAAAHAAUABgABAAsAAAAIAAUABgABAAsAAAAJAAUABgABAAsAAAAFAAMABAAEAAoAAAAFAAQABAAEAAwAAAAGAAQABAAGAAwAAAAEAAQABAAMAAQAAAAEAAMABAAMAAQAAAAIAAQABAAMAAQAAAAIAAMABAAQAAQAAAADAAQABAAMAAQAAAADAAMABAAQAAcAAAACAAQABAANAAQAAAACAAMABAANAAQAAAAJAAQABAAPAAQAAAAJAAMABAAPAAQAAAACAAEABAANAAMAAAACAAIABAANAAQAAAADAAEABAAQAAUAAAADAAIABAAQAAYAAAAEAAEABAAMAAMAAAAEAAIABAAAAAYAAAAFAAEABAAMAAIAAAAFAAIABAALAAYAAAAGAAEABAAMAAIAAAAGAAIABAALAAYAAAAHAAEABAAMAAMAAAAHAAIABAAAAAYAAAAIAAEABAAQAAIAAAAIAAIABAAQAAMAAAAJAAEABAAPAAMAAAAJAAIABAAPAAQAAAAGAAMABAAGAAoAAAAHAAMABAALAAYAAAAHAAQABAALAAYAAAA=")
 tile_set = SubResource("TileSet_jcn1r")
 
 [node name="BlockEndNotifier" type="VisibleOnScreenNotifier2D" parent="."]

@@ -6,3 +6,6 @@ res://player.gd
 res://town.tscn
 res://town_block.tscn
 res://town_block.gd
+res://home_town.tscn
+res://character_generator.gd
+res://assets/Fonts/character_generator.tscn

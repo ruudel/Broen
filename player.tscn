@@ -43,7 +43,7 @@ z_as_relative = false
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_nvl01")
 animation = &"walk"
-frame_progress = 0.508481
+frame_progress = 0.376921
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("5_dw050")

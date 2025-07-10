@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dgpk5jx7jj0ac"]
+[gd_scene load_steps=10 format=3 uid="uid://dgpk5jx7jj0ac"]
 
 [ext_resource type="Script" uid="uid://c1sur85g7a384" path="res://world.gd" id="1_0xm2m"]
 [ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="2_lquwl"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="4_272bh"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="5_7mycd"]
 [ext_resource type="PackedScene" uid="uid://bxgaw10fs18br" path="res://player.tscn" id="5_lquwl"]
+[ext_resource type="PackedScene" uid="uid://bh7ltq6ynwmq0" path="res://home_town.tscn" id="7_5vw27"]
 [ext_resource type="FontFile" uid="uid://jkqo7qhhtp16" path="res://assets/Fonts/NotoSans-Regular.ttf" id="7_272bh"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_5vw27"]
@@ -26,12 +27,12 @@ metadata/_custom_type_script = "uid://couw105c3bde4"
 
 [node name="Root" type="Node" parent="StateChart"]
 script = ExtResource("3_7mycd")
-initial_state = NodePath("InCamp")
+initial_state = NodePath("Intown_entered")
 
-[node name="InCamp" type="Node" parent="StateChart/Root"]
+[node name="Intown_entered" type="Node" parent="StateChart/Root"]
 script = ExtResource("4_272bh")
 
-[node name="Transition" type="Node" parent="StateChart/Root/InCamp"]
+[node name="Transition" type="Node" parent="StateChart/Root/Intown_entered"]
 script = ExtResource("5_7mycd")
 to = NodePath("../../Moving")
 event = &"player_walking"
@@ -42,12 +43,14 @@ script = ExtResource("4_272bh")
 
 [node name="Transition" type="Node" parent="StateChart/Root/Moving"]
 script = ExtResource("5_7mycd")
-to = NodePath("../../InCamp")
-event = &"camp_entered"
+to = NodePath("../../Intown_entered")
+event = &"town_entered"
 delay_in_seconds = "0.0"
 
 [node name="Player" parent="." instance=ExtResource("5_lquwl")]
 position = Vector2(128, 256)
+
+[node name="HomeTown" parent="." instance=ExtResource("7_5vw27")]
 
 [node name="Distance" type="Label" parent="."]
 top_level = true
@@ -59,7 +62,7 @@ offset_right = 640.0
 offset_bottom = 96.0
 label_settings = SubResource("LabelSettings_5vw27")
 
-[connection signal="state_entered" from="StateChart/Root/InCamp" to="." method="_on_idle_state_entered"]
-[connection signal="state_processing" from="StateChart/Root/InCamp" to="." method="_on_idle_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Intown_entered" to="." method="_on_idle_state_entered"]
+[connection signal="state_processing" from="StateChart/Root/Intown_entered" to="." method="_on_idle_state_processing"]
 [connection signal="state_entered" from="StateChart/Root/Moving" to="." method="_on_moving_state_entered"]
 [connection signal="state_processing" from="StateChart/Root/Moving" to="." method="_on_moving_state_processing"]
