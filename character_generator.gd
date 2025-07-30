@@ -1,10 +1,14 @@
 extends Node2D
 
+var vowel = ['a', 'e', 'i', 'o', 'u']
 var duo = []
 var driad = []
 const cons = 'bcdfghjklmnpqrstvwxyz'
-const vowel = 'aeiou'
-const ender = 'gbdkptsrnmlf'
+const ender = 'kptsrnmlf'
+
+var vowelsize = 0
+var duosize = 0
+var driadsize = 0
 
 func _ready():
 	for i in cons:
@@ -16,9 +20,20 @@ func _ready():
 				driad.append(i+j+j2)
 			for k in ender:
 				driad.append(i+j+k)
-	for i in 10:
+	vowelsize = vowel.size()-1
+	duosize = duo.size()-1
+	driadsize = driad.size()-1
+
+
+func _process(_delta):
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		generate_name()
 
+
 func generate_name():
-	print(driad[randi_range(0, driad.size())] + driad[randi_range(0, driad.size())])
-	#print(driad[randi_range(0, driad.size())] + duo[randi_range(0, duo.size())])
+	#Length is in syllables
+	#print(driad[randi_range(0, driadsize)] + driad[randi_range(0, driadsize)])
+
+	#print(driad[randi_range(0, driad.size()-1)] + duo[randi_range(0, duo.size())])
+
+	print(vowel[randi_range(0, vowelsize)] + driad[randi_range(0, driadsize)] + vowel[randi_range(0, vowelsize)])

@@ -41,6 +41,7 @@ script = ExtResource("1_b26j0")
 z_index = 2
 z_as_relative = false
 y_sort_enabled = true
+position = Vector2(0, -65)
 sprite_frames = SubResource("SpriteFrames_nvl01")
 animation = &"walk"
 frame_progress = 0.376921
@@ -72,7 +73,7 @@ event = &"to_idle"
 delay_in_seconds = "0.0"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, 13.5)
+position = Vector2(0, -53)
 shape = SubResource("RectangleShape2D_dw050")
 
 [connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_idle_state_entered"]

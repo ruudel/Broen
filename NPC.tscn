@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=3 uid="uid://b5hvoyuaklw6o"]
+
+[ext_resource type="Script" uid="uid://dr0vesqhb413m" path="res://npc.gd" id="1_r5vbj"]
+[ext_resource type="Texture2D" uid="uid://cbf4sn8l3l1w4" path="res://assets/Sprites/Characters/Default/character_yellow_idle.png" id="2_r5vbj"]
+[ext_resource type="Texture2D" uid="uid://bgwhlhwura5as" path="res://assets/Sprites/Characters/Default/character_yellow_walk_a.png" id="3_ru7ao"]
+[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="4_7isa0"]
+[ext_resource type="Texture2D" uid="uid://fiqsetpbjxx6" path="res://assets/Sprites/Characters/Default/character_yellow_walk_b.png" id="4_1478n"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="5_1478n"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="6_6m5aw"]
+[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="7_i1hoc"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nvl01"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_r5vbj")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ru7ao")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_1478n")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dw050"]
+size = Vector2(90, 103)
+
+[node name="Enemy" type="CharacterBody2D"]
+script = ExtResource("1_r5vbj")
+
+[node name="EnemyAnimation" type="AnimatedSprite2D" parent="."]
+z_index = 2
+z_as_relative = false
+y_sort_enabled = true
+sprite_frames = SubResource("SpriteFrames_nvl01")
+animation = &"walk"
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("4_7isa0")
+metadata/_custom_type_script = "uid://couw105c3bde4"
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("5_1478n")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_6m5aw")
+
+[node name="Transition" type="Node" parent="StateChart/Root/Idle"]
+script = ExtResource("7_i1hoc")
+to = NodePath("../../Walk")
+event = &"to_walk"
+delay_in_seconds = "0.0"
+
+[node name="Walk" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_6m5aw")
+
+[node name="Transition" type="Node" parent="StateChart/Root/Walk"]
+script = ExtResource("7_i1hoc")
+to = NodePath("../../Idle")
+event = &"to_idle"
+delay_in_seconds = "0.0"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 13.5)
+shape = SubResource("RectangleShape2D_dw050")
+
+[connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_idle_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Walk" to="." method="_on_walk_state_entered"]

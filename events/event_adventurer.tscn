@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://dsmlnuyoq10h4"]
+
+[ext_resource type="Script" uid="uid://dr6vtp86gh5l3" path="res://events/event_adventurer.gd" id="1_j2iko"]
+[ext_resource type="Texture2D" uid="uid://dth7r47ntnah3" path="res://assets/Sprites/Characters/Default/character_beige_idle.png" id="1_xofgl"]
+[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="2_plew3"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="3_oq1db"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="4_qnpr0"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_oq1db"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_xofgl")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qnpr0"]
+size = Vector2(112, 102)
+
+[node name="EventAdventurer" type="StaticBody2D"]
+script = ExtResource("1_j2iko")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, -65)
+sprite_frames = SubResource("SpriteFrames_oq1db")
+animation = &"idle"
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("2_plew3")
+metadata/_custom_type_script = "uid://couw105c3bde4"
+
+[node name="CompoundState" type="Node" parent="StateChart"]
+script = ExtResource("3_oq1db")
+initial_state = NodePath("AtomicState")
+
+[node name="AtomicState" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_qnpr0")
+
+[node name="AtomicState2" type="Node" parent="StateChart/CompoundState"]
+script = ExtResource("4_qnpr0")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-375, -53)
+shape = SubResource("RectangleShape2D_qnpr0")
+
+[connection signal="player_triggered_event" from="." to="." method="_on_player_triggered_event"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

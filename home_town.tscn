@@ -1,6 +1,5 @@
-[gd_scene load_steps=8 format=4 uid="uid://bh7ltq6ynwmq0"]
+[gd_scene load_steps=7 format=4 uid="uid://bh7ltq6ynwmq0"]
 
-[ext_resource type="Script" uid="uid://dnliklem1txgj" path="res://town_block.gd" id="1_snpnx"]
 [ext_resource type="Texture2D" uid="uid://bl1gfepmhk41l" path="res://assets/Sheets/Environment/medieval_tilesheet.png" id="2_kfrs0"]
 [ext_resource type="Texture2D" uid="uid://c4w6i7ljft01j" path="res://assets/Sheets/Environment/spritesheet-tiles-default.png" id="3_xtjm7"]
 
@@ -629,7 +628,6 @@ sources/6 = SubResource("TileSetAtlasSource_yiups")
 size = Vector2(66, 66)
 
 [node name="HomeTown" type="Node2D"]
-script = ExtResource("1_snpnx")
 
 [node name="GroundTiles" type="TileMapLayer" parent="."]
 z_as_relative = false
