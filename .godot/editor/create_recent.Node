@@ -1,6 +1,10 @@
-AnimationPlayer
-Sprite2D
+NinePatchRect
 TextureRect
+Sprite2D
+Node2D
+ParallaxLayer
+Parallax2D
+AnimationPlayer
 Label
 Button
 Panel
@@ -8,7 +12,3 @@ CanvasLayer
 Area2D
 CharacterBody2D
 StaticBody2D
-StateChart
-AnimatedSprite2D
-CollisionShape2D
-TileMapLayer

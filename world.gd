@@ -5,34 +5,50 @@ const GROUND_BLOCK_SCENE = preload("res://ground_block.tscn")
 const TOWN_BLOCK_SCENE = preload("res://town_block.tscn")
 const EVENT_SCENES = [preload("res://events/event_adventurer.tscn"),preload("res://events/event_enemy.tscn")]
 
+#Dialog
+const HOMETOWN_DIALOG = preload("res://dialogic/hometown.dtl")
+
 const EVENT_CHANCE := 0.2  # % chance to spawn an event
 const TOWN_MIN_DISTANCE := 10
 const TOWN_CHANCE := 0.35
 
 # Variables
-var speed := 600
+var speed := 250
 var ground_blocks: Array = []
 var last_town := 0
 var distance_traveled := 0
-var randSeed: int = 73425  # Set this to whatever you like for consistent worlds
+var randSeed: int =  randi()  # Set this to whatever you like for consistent worlds
 var world_rng := RandomNumberGenerator.new()
+
+var is_dialog: bool
 
 # Ready
 func _ready():
+	randomize()
 	spawn_ground_block(Vector2(640, 0))
 	ground_blocks.append(get_node("HomeTown"))
 	var home = get_node("HomeTown")
 	home.town_name = "home"
 	home.connect("player_entered_town", Callable(self, "_on_player_entered_town"))
-
+	
+	Dialogic.signal_event.connect(_on_dialogic_signal)
+	Dialogic.start(HOMETOWN_DIALOG)
+	$StateChart.send_event("dialog_open")
 
 # Process
 func _process(_delta):
+	
 	$Distance.text = "Distance: " + str(distance_traveled)
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		$StateChart.send_event("player_walking")
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-		$StateChart.send_event("player_stopped")
+
+func _unhandled_input(event):
+	if is_dialog:
+		return
+
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			$StateChart.send_event("player_walking")
+		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			$StateChart.send_event("player_stopped")
 
 # Block Spawning (Deterministic)
 func spawn_ground_block(spawn_position: Vector2):
@@ -55,7 +71,7 @@ func spawn_ground_block(spawn_position: Vector2):
 	var event_rng = RandomNumberGenerator.new()
 	event_rng.seed = randSeed + distance_traveled + 100000  # Separate stream
 
-	if block_scene != TOWN_BLOCK_SCENE:
+	if block_scene != TOWN_BLOCK_SCENE and last_town > 1:
 		if event_rng.randf() < EVENT_CHANCE:
 			var event_scene = EVENT_SCENES[event_rng.randi_range(0, EVENT_SCENES.size() - 1)]
 			var event_instance = event_scene.instantiate()
@@ -113,6 +129,11 @@ func show_event_popup(text: String):
 
 
 
+func _on_dialogic_signal(argument:String):
+	if argument == "end":
+		is_dialog=false
+		$StateChart.send_event("player_stopped")
+
 
 
 func _on_groundblock_end_visible(block):
@@ -124,12 +145,16 @@ func _on_groundblock_end_visible(block):
 func _on_moving_state_processing(delta: float):
 	for block in ground_blocks:
 		block.position.x -= speed * delta
+	
+	#Background moving
+	$Background.world_speed = speed
 
 func _on_idle_state_processing(_delta: float):
 	pass
 
 func _on_idle_state_entered():
 	get_node("Player/StateChart").send_event("to_idle")
+	$Background.world_speed=0
 	
 func _on_moving_state_entered():
 	get_node("Player/StateChart").send_event("to_walk")
@@ -141,10 +166,14 @@ func _on_player_entered_town(town_name:String):
 	$GUI/FadeTownLabel.play("fade_town_label")
 	$GUI/TownLabel.update_position()
 
-func _on_player_triggered_event():
+func _on_player_triggered_event(char_name:String, type:String):
 	$StateChart.send_event("player_stopped")
-	show_event_popup("Interesting stuff will happen here")
+	if type == "npc":
+		show_event_popup("Hi, my name is " + char_name)
 
 func _on_player_triggered_enemy():
 	$StateChart.send_event("player_stopped")
 	show_event_popup("Enemy!!!")
+
+func _on_dialog_state_entered():
+	is_dialog = true

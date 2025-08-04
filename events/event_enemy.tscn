@@ -74,7 +74,7 @@ delay_in_seconds = "0.0"
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(-356, -43)
+position = Vector2(-341, -43)
 shape = SubResource("RectangleShape2D_dw050")
 
 [connection signal="player_triggered_enemy" from="." to="." method="_on_player_triggered_enemy"]

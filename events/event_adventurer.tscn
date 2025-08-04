@@ -27,6 +27,7 @@ script = ExtResource("1_j2iko")
 position = Vector2(1, -65)
 sprite_frames = SubResource("SpriteFrames_oq1db")
 animation = &"idle"
+flip_h = true
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("2_plew3")
@@ -45,7 +46,7 @@ script = ExtResource("4_qnpr0")
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(-375, -53)
+position = Vector2(-335, -53)
 shape = SubResource("RectangleShape2D_qnpr0")
 
 [connection signal="player_triggered_event" from="." to="." method="_on_player_triggered_event"]
